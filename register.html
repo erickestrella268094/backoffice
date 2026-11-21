@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Crear Cuenta</h1>
+
+    <form action="login.html">
+        <div class="campoinicio">
+            <input class="estiloinput" required type="text"
+                placeholder="Nombre completo"
+                name="name">
+
+            <input class="estiloinput" required type="email"
+                placeholder="Correo electrónico"
+                name="email">
+
+            <input class="estiloinput" required type="text"
+                placeholder="ID ITSON (6 dígitos)"
+                maxlength="6"
+                pattern="\d{6}"
+                name="itsonId">
+
+            <input class="estiloinput" required type="password" 
+                placeholder="Contraseña"
+                minlength="6"
+                name="password">
+
+            <button class="botonestilo" type="submit">Registrarse</button>
+
+            <p>¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a></p>
+        </div>
+    </form>
+
+</body>
+</html>
