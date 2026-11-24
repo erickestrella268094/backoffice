@@ -83,21 +83,6 @@ form{
     background-color: #35b0eb;
 }
 
-@media screen and (max-width: 480px){
-    h1{
-        font-size: 36px;
-        margin-bottom: 20px;
-    }
-
-    .campoinicio{
-        max-width: 90%;
-    }
-}
-
-
-
-
-
 body.homeCuerpo{
     justify-content: flex-start;
     padding-top: 30px;
@@ -135,6 +120,33 @@ body.homeCuerpo{
     max-width: 900px;
 }
 
+.formularioMercancia{
+    background-color: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.formularioMercancia h2{
+    font-size: 20px;
+    color: #333333;
+    margin-bottom: 14px;
+}
+
+form.gridFormulario{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.accionesFormulario{
+    grid-column: span 2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
 .homeAcciones{
     display: flex;
     justify-content: space-between;
@@ -151,24 +163,121 @@ body.homeCuerpo{
     width: auto;
     margin: 0;
     padding: 0 18px;
+    white-space: nowrap;
 }
 
 .proyectos{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    min-height: 110px;
     background-color: #F8FAFC;
     border: 1px dashed #CBD5E1;
     border-radius: 8px;
-    padding: 40px 20px;
-    text-align: center;
+    padding: 20px;
 }
 
-.listaProyectos{
-    color: #6B6464;
-    font-size: 14px;
+.tarjetaProducto{
+    background-color: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.imgProducto{
+    width: 100%;
+    height: 120px;
+    max-height: 120px;
+    object-fit: contain;
+    display: block;
+    border-radius: 6px;
+    background-color: #F8FAFC;
+    padding: 4px;
+}
+
+.etiquetaDepartamento{
+    display: inline-block;
+    background-color: #E0F2FE;
+    color: #0284C7;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+}
+
+.infoProducto h3{
+    font-size: 17px;
+    color: #1E293B;
+    margin-bottom: 4px;
+}
+
+.precioProducto{
+    font-size: 16px;
+    font-weight: 700;
+    color: #0284C7;
+}
+
+.botonesProducto{
+    display: flex;
+    gap: 8px;
+}
+
+.btnActualizar,
+.btnEliminar{
+    flex: 1;
+    height: 34px;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btnActualizar{
+    background-color: #4CC2FC;
+    color: #FFFFFF;
+}
+
+.btnActualizar:hover{
+    background-color: #35b0eb;
+}
+
+.btnEliminar{
+    background-color: #FEE2E2;
+    color: #DC2626;
+}
+
+.btnEliminar:hover{
+    background-color: #FECACA;
+}
+
+@media screen and (max-width: 600px){
+    form.gridFormulario{
+        grid-template-columns: 1fr;
+    }
+
+    .accionesFormulario{
+        grid-column: span 1;
+    }
 }
 
 @media screen and (max-width: 480px){
+    h1{
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+
+    .campoinicio{
+        max-width: 90%;
+    }
+
     .homeSuperior,
-    .homeAcciones {
+    .homeAcciones{
         flex-direction: column;
         gap: 12px;
         text-align: center;

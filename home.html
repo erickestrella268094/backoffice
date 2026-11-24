@@ -1,31 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backoffice - Home</title>
+    <title>Backoffice - Mercancía</title>
     <script>
-        window.location.replace("login.html")
+        if (!localStorage.getItem("token")) {
+            window.location.replace("login.html");
+        }
     </script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="homeCuerpo">
     
     <header class="homeSuperior">
-        <h1>Panel de Proyectos</h1>
-        <a href="login.html" class="btnSalir">Cerrar sesión</a>
+        <h1>Inventario de Supermercado</h1>
+        <a href="login.html" id="btnCerrarSesion" class="btnSalir">Cerrar sesión</a>
     </header>
 
     <main class="homeContenedor">
-        <section class="homeAcciones">
-            <h2>Mis Proyectos</h2>
-            <button class="botonestilo btnAgregar" type="button">+ Agregar proyecto</button>
+        <section class="formularioMercancia">
+            <h2 id="tituloFormulario">Agregar Mercancía</h2>
+            <form id="formMercancia" class="gridFormulario">
+                <input type="text" id="inputNombre" class="estiloinput" placeholder="Nombre del producto" required>
+                <input type="text" id="inputDepartamento" class="estiloinput" placeholder="Departamento" required>
+                <input type="number" id="inputPrecio" class="estiloinput" placeholder="Precio" step="0.01" min="0" required>
+                <input type="url" id="inputImagen" class="estiloinput" placeholder="URL de Imagen">
+                
+                <div class="accionesFormulario">
+                    <button type="button" id="btnCancelarEdicion" class="btnEliminar" style="display: none; max-width: 120px;">Cancelar</button>
+                    <button type="submit" id="btnSubmitForm" class="botonestilo btnAgregar">+ Agregar mercancía</button>
+                </div>
+            </form>
         </section>
 
-        <section class="proyectos">
-            <p class="listaProyectos">Aquí se mostrarán los proyectos registrados en tu portafolio.</p>
+        <section class="homeAcciones">
+            <h2>Mercancía Registrada</h2>
         </section>
+
+        <section id="panelMercancia" class="proyectos"></section>
     </main>
-    
+
+    <script>
+        const formMercancia = document.getElementById("formMercancia");
+        const tituloFormulario = document.getElementById("tituloFormulario");
+        const btnSubmitForm = document.getElementById("btnSubmitForm");
+        const btnCancelarEdicion = document.getElementById("btnCancelarEdicion");
+        const panelMercancia = document.getElementById("panelMercancia");
+
+        const inputNombre = document.getElementById("inputNombre");
+        const inputDepartamento = document.getElementById("inputDepartamento");
+        const inputPrecio = document.getElementById("inputPrecio");
+        const inputImagen = document.getElementById("inputImagen");
+
+        const IMAGEN_DEFECTO = "https://placehold.co/300x160/E0F2FE/0284C7?text=Producto";
+        let tarjetaEnEdicion = null;
+
+        panelMercancia.addEventListener("click", (e) => {
+            const tarjeta = e.target.closest(".tarjetaProducto");
+            if (!tarjeta) return;
+
+            if (e.target.classList.contains("btnActualizar")) {
+                tarjetaEnEdicion = tarjeta;
+
+                const imgActual = tarjeta.querySelector(".imgProducto").src;
+                inputNombre.value = tarjeta.querySelector("h3").textContent;
+                inputDepartamento.value = tarjeta.querySelector(".etiquetaDepartamento").textContent;
+                inputPrecio.value = tarjeta.dataset.precio || "";
+                inputImagen.value = imgActual === IMAGEN_DEFECTO ? "" : imgActual;
+
+                tituloFormulario.textContent = "Editar Mercancía";
+                btnSubmitForm.textContent = "Guardar cambios";
+                btnCancelarEdicion.style.display = "inline-block";
+                inputNombre.focus();
+            }
+
+            if (e.target.classList.contains("btnEliminar")) {
+                if (tarjetaEnEdicion === tarjeta) resetearFormulario();
+                tarjeta.remove();
+            }
+        });
+
+        formMercancia.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const urlImagen = inputImagen.value.trim() || IMAGEN_DEFECTO;
+            const precioFormateado = parseFloat(inputPrecio.value).toFixed(2);
+
+            if (tarjetaEnEdicion) {
+                const img = tarjetaEnEdicion.querySelector(".imgProducto");
+                img.src = urlImagen;
+                img.alt = inputNombre.value;
+                tarjetaEnEdicion.dataset.precio = precioFormateado;
+                tarjetaEnEdicion.querySelector(".etiquetaDepartamento").textContent = inputDepartamento.value;
+                tarjetaEnEdicion.querySelector("h3").textContent = inputNombre.value;
+                tarjetaEnEdicion.querySelector(".precioProducto").textContent = `$${precioFormateado}`;
+                resetearFormulario();
+            } else {
+                const nuevaTarjeta = document.createElement("article");
+                nuevaTarjeta.className = "tarjetaProducto";
+                nuevaTarjeta.dataset.precio = precioFormateado;
+                nuevaTarjeta.innerHTML = `
+                    <img src="${urlImagen}" alt="${inputNombre.value}" class="imgProducto" onerror="this.src='${IMAGEN_DEFECTO}'">
+                    <div class="infoProducto">
+                        <span class="etiquetaDepartamento">${inputDepartamento.value}</span>
+                        <h3>${inputNombre.value}</h3>
+                        <p class="precioProducto">$${precioFormateado}</p>
+                    </div>
+                    <div class="botonesProducto">
+                        <button type="button" class="btnActualizar">Actualizar</button>
+                        <button type="button" class="btnEliminar">Eliminar</button>
+                    </div>
+                `;
+                panelMercancia.appendChild(nuevaTarjeta);
+                formMercancia.reset();
+            }
+        });
+
+        btnCancelarEdicion.addEventListener("click", resetearFormulario);
+
+        function resetearFormulario() {
+            tarjetaEnEdicion = null;
+            formMercancia.reset();
+            tituloFormulario.textContent = "Agregar Mercancía";
+            btnSubmitForm.textContent = "+ Agregar mercancía";
+            btnCancelarEdicion.style.display = "none";
+        }
+
+        document.getElementById("btnCerrarSesion").addEventListener("click", () => {
+            localStorage.removeItem("token");
+        });
+    </script>
 </body>
 </html>
